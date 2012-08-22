@@ -20,7 +20,7 @@ use 5.006;
 use Carp;
 use strict;
 
-our $VERSION = "0.".eval{'$Rev: 22 $'=~/(\d+)/;$1;} ;
+our $VERSION = "0.".eval{'$Rev: 23 $'=~/(\d+)/;$1;} ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
