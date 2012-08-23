@@ -20,7 +20,7 @@ use 5.006;
 use Carp;
 use strict;
 
-our $VERSION = "0.".eval{'$Rev: 23 $'=~/(\d+)/;$1;} ;
+our $VERSION = "0.".eval{'$Rev: 24 $'=~/(\d+)/;$1;} ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -75,7 +75,7 @@ my ($log,@files,$init,@excludes,@rsync_options,$dry_run,$config,$config_file,$ar
 ############################################################
 
 {
-  package Log ;
+  package _Log ;
   require Exporter ;
   our @ISA = qw(Exporter);
   our @EXPORT=qw() ;
@@ -736,7 +736,7 @@ else
 $config->init($default_conf,\%arg_conf) ;
 $config->load() ;
 
-$log = new Log($cmdline,$config->get("debug")?2:$config->get("verbose")?1:0) ;
+$log = new _Log($cmdline,$config->get("debug")?2:$config->get("verbose")?1:0) ;
 $log->debug("config: ".Dumper $config) ;
 
 my $interval = shift() or _usage("wrong number of arguments") ;
