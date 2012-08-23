@@ -20,7 +20,7 @@ use 5.006;
 use Carp;
 use strict;
 
-our $VERSION = "0.".eval{'$Rev: 24 $'=~/(\d+)/;$1;} ;
+our $VERSION = "0.".eval{'$Rev: 25 $'=~/(\d+)/;$1;} ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -202,7 +202,7 @@ END { $log->send() if $log ; closelog() ; }
 ############################################################
 
 {
-  package Config ;
+  package _Config ;
   require Exporter ;
   our @ISA = qw(Exporter);
   our @EXPORT=qw() ;
@@ -253,7 +253,7 @@ END { $log->send() if $log ; closelog() ; }
             ) ;
     return unless defined $confname ;
 
-    my $conffile=new Config::General(-ConfigFile=>$confname,-ExtendedAccess => 1) or $log->warn("can't read config file $confname") ;
+    my $conffile=new_Config::General(-ConfigFile=>$confname,-ExtendedAccess => 1) or $log->warn("can't read config file $confname") ;
     my %conf ;
     {
       my %this_conf = $conffile->getall() ;
@@ -724,11 +724,11 @@ GetOptions(
 # load conf file
 if ($config_file)
 {
-  $config = new Config(-file=>$config_file,-path=>"") ;
+  $config = new _Config(-file=>$config_file,-path=>"") ;
 }
 else
 {
-  $config = new Config(
+  $config = new _Config(
     -file=>"$this_prog.conf"
     , -path=>$CONFPATH
   ) ;

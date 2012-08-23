@@ -28,12 +28,9 @@ meta-spec:
   version: 1.4
 name: Dir-Rocknroll
 provides:
-  Config:
-    file: lib/Dir/Rocknroll.pm
-    version: 0
   Dir::Rocknroll:
     file: lib/Dir/Rocknroll.pm
-    version: 0.24
+    version: 0.25
   RocknRoll:
     file: lib/Dir/Rocknroll.pm
     version: 0
@@ -41,4 +38,4 @@ requires:
   perl: 5.006
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.24
+version: 0.25
