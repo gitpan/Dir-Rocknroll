@@ -20,7 +20,7 @@ use 5.006;
 use Carp;
 use strict;
 
-our $VERSION = "0.".eval{'$Rev: 26 $'=~/(\d+)/;$1;} ;
+our $VERSION = "0.".eval{'$Rev: 27 $'=~/(\d+)/;$1;} ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -280,7 +280,7 @@ END { $log->send() if $log ; closelog() ; }
 ############################################################
 
 {
-  package RocknRoll ;
+  package _RocknRoll ;
   require Exporter ;
   our @ISA = qw(Exporter);
   our @EXPORT=qw() ;
@@ -755,7 +755,7 @@ else
 }
 _usage("wrong number of arguments") if scalar(@ARGV)!=0 ;
 
-my $rocknRoll = new RocknRoll($dstdir,$interval) ;
+my $rocknRoll = new _RocknRoll($dstdir,$interval) ;
 
 if ($init)
 {
