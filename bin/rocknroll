@@ -1,3 +1,11 @@
+#!/usr/bin/perl
+
+use warnings ;
+use strict ;
+
+use Dir::Rocknroll ;
+Dir::Rocknroll::_run() ;
+
 
 
 
@@ -21,8 +29,7 @@ rocknroll --man
 =head1 DESCRIPTION
 
 rocknroll backups a remote directories tree srcdir in dstdir onto the
-local host.  For this
-²backup, it manages a set of archives, named
+local host.  For this backup, it manages a set of archives, named
 tag.1, tag.2, etc.  Using the 'link-dest' option of rsync, it
 keeps only the difference between the different archives.
 
@@ -187,27 +194,63 @@ running rsync.
 
 rsnapshot, <http://rsnapshot.org>. rsnapshot and rocknroll have similar
 functionalities, and rsnapshot has been the first on the place. But
-when I began to think about rocknroll, I've never heart of rsnapshot.
+when I began to think about rocknroll, I've never heard of rnspashot.
 
 =head1 AUTHOR
 
-Jacquelin Charbonnel, E<lt>jacquelin.charbonnel at math.cnrs.frE<gt>
+Jacquelin Charbonnel, C<< <jacquelin.charbonnel at math.cnrs.fr> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-Dir-Rocknroll at rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dir-Rocknroll>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Dir-Rocknroll
+
+You can also look for information at:
+
+=over 4
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/Dir-Rocknroll>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/Dir-Rocknroll>
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dir-Rocknroll>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/Dir-Rocknroll>
+
+=back
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright Jacquelin Charbonnel <jacquelin.charbonnel at math.cnrs.fr>
+Copyright Jacquelin Charbonnel E<lt> jacquelin.charbonnel at math.cnrs.fr E<gt>
 
 This software is governed by the CeCILL-C license under French law and
-abiding by the rules of distribution of free software.  You can  use,
-modify and/ or redistribute the software under the terms of the CeCILL-
-C license as circulated by CEA, CNRS and INRIA at the following URL
-"http://www.cecill.info".
+abiding by the rules of distribution of free software.  You can  use, 
+modify and/ or redistribute the software under the terms of the CeCILL-C
+license as circulated by CEA, CNRS and INRIA at the following URL
+"http://www.cecill.info". 
 
 As a counterpart to the access to the source code and  rights to copy,
 modify and redistribute granted by the license, users are provided only
 with a limited warranty  and the software's author,  the holder of the
 economic rights,  and the successive licensors  have only  limited
-liability.
+liability. 
 
 In this respect, the user's attention is drawn to the risks associated
 with loading,  using,  modifying and/or developing or reproducing the
@@ -216,9 +259,10 @@ that may mean  that it is complicated to manipulate,  and  that  also
 therefore means  that it is reserved for developers  and  experienced
 professionals having in-depth computer knowledge. Users are therefore
 encouraged to load and test the software's suitability as regards their
-requirements in conditions enabling the security of their systems
-and/or data to be ensured and,  more generally, to use and operate it
-in the same conditions as regards security.
+requirements in conditions enabling the security of their systems and/or 
+data to be ensured and,  more generally, to use and operate it in the 
+same conditions as regards security. 
 
 The fact that you are presently reading this means that you have had
 knowledge of the CeCILL-C license and that you accept its terms.
+

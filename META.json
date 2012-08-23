@@ -47,7 +47,7 @@
    "provides" : {
       "Dir::Rocknroll" : {
          "file" : "lib/Dir/Rocknroll.pm",
-         "version" : "0.25"
+         "version" : "0.26"
       },
       "RocknRoll" : {
          "file" : "lib/Dir/Rocknroll.pm",
@@ -60,5 +60,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.25"
+   "version" : "0.26"
 }

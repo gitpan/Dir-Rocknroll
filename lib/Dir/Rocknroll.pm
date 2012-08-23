@@ -20,7 +20,7 @@ use 5.006;
 use Carp;
 use strict;
 
-our $VERSION = "0.".eval{'$Rev: 25 $'=~/(\d+)/;$1;} ;
+our $VERSION = "0.".eval{'$Rev: 26 $'=~/(\d+)/;$1;} ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -62,7 +62,7 @@ my $default_conf = {
   , "rsync_retcode_ok" => 0
   , "rsync_retcode_warn" => 24
   , "ro" => ["--stats"]
-  , "ro_default" => "--hard-links --xattrs --archive -e ssh"
+  , "ro_default" => "--hard-links --archive -e ssh"
   , "send_warn" => 0
   , "smtp_server" => "localhost"
   , "update" => 0
