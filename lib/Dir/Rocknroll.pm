@@ -2,9 +2,8 @@ package Dir::Rocknroll ;
 
 ####################################################
 #
-# Rock'n'Roll : Rsync fOr baCKup and Roll
+# rocknroll : Rsync fOr baCKup and Roll
 #
-# http://math.univ-angers.fr/~charbonnel/rocknroll
 # Jacquelin Charbonnel - CNRS/Mathrice/LAREMA - 2006-09-04
 #
 # $Id: rocknroll 22 2012-07-24 11:57:10Z jacquelin.charbonnel $
@@ -20,7 +19,8 @@ use 5.006;
 use Carp;
 use strict;
 
-our $VERSION = "0.".eval{'$Rev: 27 $'=~/(\d+)/;$1;} ;
+#our $VERSION = "0.".eval{'$Rev: 27 $'=~/(\d+)/;$1;} ;
+our $VERSION = "0.28" ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -784,94 +784,98 @@ else
 
 =head1 NAME
 
-rocknroll - Rsync fOr baCKup and Roll
+C<rocknroll> - Rsync fOr baCKup and Roll
 
-Light incremental backup tool based on rsync.
+Light incremental backup tool based on C<rsync>.
 
 =head1 SYNOPSIS
 
-rocknroll --init n tag dstdir
+  # rocknroll --init n tag dstdir           # initialization
 
-rocknroll [options] tag srcdir dstdir
+  # rocknroll [options] tag srcdir dstdir   # backup
 
-rocknroll --help
+  # rocknroll --help
 
-rocknroll --man
+  # rocknroll --man
 
 =head1 DESCRIPTION
 
-rocknroll backups a remote directories tree srcdir in dstdir onto the
+C<rocknroll> backups a remote directories tree C<srcdir> in C<dstdir> onto the
 local host.  For this backup, it manages a set of archives, named
-tag.1, tag.2, etc.  Using the 'link-dest' option of rsync, it
+C<tag.1>, C<tag.2>, etc.  Using the C<link-dest> option of C<rsync>, it
 keeps only the difference between the different archives.
 
-A dstdir can contain several tagged sequences of archive. For example,
-a dstdir can contain 2 archive sets named daily.1 daily.2 daily.3
-daily.4 daily.5 daily.6 daily.7 and week.1 week.2 week.3 week.4.
+A C<dstdir> can contain several tagged sequences of archive. For example,
+a C<dstdir> can contain 2 archive sets named C<daily.1 daily.2 daily.3
+daily.4 daily.5 daily.6 daily.7> and C<week.1 week.2 week.3 week.4>.
 
-Before a dstdir can be able to store an archive sequence, it must be
-formatted with the --init option.
+Before a C<dstdir> can be able to store an archive sequence, it must be
+formatted with the C<--init> option.
 
 =head1 OPTIONS
 
 Almost options can as well be specified into the configuration file.
 
-=head2 -c config_file
+=over 4
+
+=item -c C<config_file>
 
 use an alternate config file.
 
-By default, rocknroll.conf is
-searched in @/, @/../etc/, /etc/, /etc/rocknroll.d/
-where @ is the directory containing the rocknroll binary.
+By default, the config file C<rocknroll.conf> is
+searched in C<@/>, C<@/../etc/>, C</etc/>, C</etc/rocknroll.d/>
+where C<@> is the directory containing the rocknroll binary.
 
-=head2 --continue
+=item --continue
 
-start again with an existing .tag.running archive (useful after an
+start again with an existing C<.tag.running> archive (useful after an
 abort)
 
-=head2 --debug
+=item --debug
 
 debug mode
 
-=head2 --dry-run
+=item --dry-run
 
 don't perfom any action, just say what it could be done
 
-=head2 --help
+=item --help
 
 print usage
 
-=head2 --man
+=item --man
 
 print the manual
 
-=head2 --no-links
+=item --no-links
 
-don't specify any --link-dest option to rsync
+don't specify any C<--link-dest> option to C<rsync(1)>
 
-=head2 --no-roll
+=item --no-roll
 
 don't roll up the archives set
 
-=head2 --refresh
+=item --refresh
 
-only update the archive tag.1 (without deletion of any files on
+only update the archive C<tag.1> (without deletion of any files on
 it).  Don't roll up the archives set.
 
-=head2 --ro "--opt1 --opt2 --opt3"
+=item --ro C<"--opt1 --opt2 --opt3">
 
-pass some options to rsync (useful only in argument of command line)
+pass some options to C<rsync(1)> (useful only in argument of command line)
 
-=head2 --update
+=item --update
 
-update archive tag.1 (with deletion of obsolete files).  Don't roll
+update archive C<tag.1> (with deletion of obsolete files).  Don't roll
 up archives set.
+
+=back
 
 =head1 CONFIGURATION FILE
 
-Some directives are taken from rocknroll.conf, a file located
-in @/, @/../etc/, /etc/, /etc/rocknroll.d/
-where @ is the directory contained the rocknroll binary.
+Some directives are taken from C<rocknroll.conf>, a file located
+in C<@/>, C<@/../etc/>, C</etc/>, C</etc/rocknroll.d/>
+where C<@> is the directory contained the rocknroll binary.
 
 The format of a line is :
 
@@ -881,92 +885,116 @@ or
 
   directive value
 
-A # starts a comment.
+A C<#> starts a comment.
 
 
 =head1 CONFIGURATION FILE DIRECTIVES
 
 Each following directive can be passed as well on the command line as an option.
 
-=head2 link-dest dir
+=over 4
 
-by default the link-dest option is set to the tag.1 directory name.
+=item link-dest C<dir>
+
+by default the C<--link-dest> option of C<rsync(1)> is set to the C<tag.1> directory name.
 This option is to bypass this default.
 
-=head2 mail_from email
+=item mail_from C<email>
 
 set the email address of the sender for the mail alerts
 
-=head2 mail_to email
+=item mail_to C<email>
 
 set the email address of the recipient for the mail alerts
 
-=head2 max_runtime time_in_second
+=item max_runtime C<time_in_second>
 
 set the max among of time that a backup can take. Older than this
-value, a .tag.running temporary directory will be deleted.
+value, a C<.tag.running> temporary directory will be deleted.
 
-=head2 rsync_path path/to/rsync
+=item rsync_path C<path/to/rsync>
 
-specify the path of the rsync command line (default /usr/bin/rsync)
+specify the path of the C<rsync> command line (default C</usr/bin/rsync>)
 
-=head2 rsync_retcode_ok n,n,n,n...
+=item rsync_retcode_ok C<n,n,n,n...>
 
-specify a list of return codes of rsync considered as OK codes.
-Each code not specified with --rsync_retcode_ok or
---rsync_retcode_warn is considered as an error return code.
+specify a list of return codes of C<rsync> considered as OK codes.
+Each code not specified with C<--rsync_retcode_ok> or
+C<--rsync_retcode_warn> is considered as an error return code.
 
-=head2 rsync_retcode_warn n,n,n...
+=item rsync_retcode_warn C<n,n,n...>
 
-specify a list of return codes of rsync considered as warning
-codes.  Each code not specified with --rsync_retcode_ok or
---rsync_retcode_warn is considered as an error return code.
+specify a list of return codes of C<rsync> considered as warning
+codes.  Each code not specified with C<--rsync_retcode_ok> or
+C<--rsync_retcode_warn> is considered as an error return code.
 
-=head2 ro_default "--opt1 --opt2"
+=item ro_default C<"--opt1 --opt2">
 
-pass some options to rsync (useful only in config file)
+pass some options to C<rsync> (useful only in config file)
 
-=head2 send_warn 0/1
+=item send_warn C<0|1>
 
 send alert on warning (default is send alert only on error)
 
-=head2 smtp_server smtp_server
+=item smtp_server C<smtp_server>
 
 set the SMTP server
 
-=head2 use_syslog 0/1
+=item use_syslog C<0|1>
 
 enable to talk to syslog
+
+=back
 
 =head1 ARCHIVE INITIALIZATION
 
 This operation is needed before a directory can be used as a backup destination.
 
-=head2 --init n
+=over 4
 
-format a backup directory to receive n archives.
+=item --init C<n>
+
+format a backup directory to receive C<n> archives.
+
+=back
 
 =head1 FILES AND DIRECTORIES
 
-=head2 rocknroll.conf
+=over 4
 
-configuration file
+=item rocknroll.conf
 
-=head2 .tag.ctl
+the configuration file
 
-a control file located in the backup directory, related to the tag
-archive set.
+=item .C<tag>.ctl
 
-=head2 .tag.running
+a control file located in the archive directory, related to the C<tag>
+archive set. 
+
+=over 4
+
+=item Note
+
+This file stores the number of archives declared at the initialization of the C<tag> archives set. 
+It is useful to recovery a normal state, in case of some archives disappear.
+Normaly, the number stored in this file must match the number of current archives in the set.
+If not, a warning is sent.
+If this file is not found, it is re-create according of the current state of the archive set, and a warning is sent.
+
+=back
+
+=item .C<tag>.running
 
 the temporary directory (located in the archive directory) for the
 running rsync.
 
+=back
+
 =head1 SEE ALSO
 
-rsnapshot, <http://rsnapshot.org>. rsnapshot and rocknroll have similar
-functionalities, and rsnapshot has been the first on the place. But
-when I began to think about rocknroll, I've never heard of rnspashot.
+C<rsnapshot>, <http://rsnapshot.org>. C<rsnapshot> and C<rocknroll> have similar
+functionalities, and C<rsnapshot> has been the first on the place. But
+when I began to think about C<rocknroll>, I've never heard of C<rnspashot>.
 
 =head1 AUTHOR
 
