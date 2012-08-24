@@ -6,7 +6,7 @@ package Dir::Rocknroll ;
 #
 # Jacquelin Charbonnel - CNRS/Mathrice/LAREMA - 2006-09-04
 #
-# $Id: rocknroll 22 2012-07-24 11:57:10Z jacquelin.charbonnel $
+# $Id: Rocknroll.pm 487 2012-08-24 18:33:34Z jaclin $
 #
 ####################################################
 
@@ -19,8 +19,8 @@ use 5.006;
 use Carp;
 use strict;
 
-#our $VERSION = "0.".eval{'$Rev: 27 $'=~/(\d+)/;$1;} ;
-our $VERSION = 0.31 ;
+#our $VERSION = "0.".eval{'$Rev: 487 $'=~/(\d+)/;$1;} ;
+our $VERSION = 0.32 ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
