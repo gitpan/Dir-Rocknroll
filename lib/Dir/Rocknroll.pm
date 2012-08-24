@@ -20,7 +20,7 @@ use Carp;
 use strict;
 
 #our $VERSION = "0.".eval{'$Rev: 27 $'=~/(\d+)/;$1;} ;
-our $VERSION = "0.30" ;
+our $VERSION = 0.31 ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -779,6 +779,7 @@ else
 }
 
 1;
+__END__
 
 
 
