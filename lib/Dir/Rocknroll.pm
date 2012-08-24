@@ -20,7 +20,7 @@ use Carp;
 use strict;
 
 #our $VERSION = "0.".eval{'$Rev: 27 $'=~/(\d+)/;$1;} ;
-our $VERSION = "0.28" ;
+our $VERSION = "0.29" ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -809,7 +809,7 @@ A C<dstdir> can contain several tagged sequences of archive. For example,
 a C<dstdir> can contain 2 archive sets named C<daily.1 daily.2 daily.3
 daily.4 daily.5 daily.6 daily.7> and C<week.1 week.2 week.3 week.4>.
 
-Before a C<dstdir> can be able to store an archive sequence, it must be
+Before a C<dstdir> can be able to store an archive set, it must be
 formatted with the C<--init> option.
 
 =head1 OPTIONS
@@ -862,7 +862,7 @@ it).  Don't roll up the archives set.
 
 =item --ro C<"--opt1 --opt2 --opt3">
 
-pass some options to C<rsync(1)> (useful only in argument of command line)
+pass some options to C<rsync(1)> (useful only as command line option)
 
 =item --update
 
@@ -873,24 +873,24 @@ up archives set.
 
 =head1 CONFIGURATION FILE
 
-Some directives are taken from C<rocknroll.conf>, a file located
-in C<@/>, C<@/../etc/>, C</etc/>, C</etc/rocknroll.d/>
+Options are also taken from directives specified into C<rocknroll.conf>, 
+a file located in C<@/>, C<@/../etc/>, C</etc/>, C</etc/rocknroll.d/>
 where C<@> is the directory contained the rocknroll binary.
 
 The format of a line is :
 
-  directive=value
+  option=value
 
 or
 
-  directive value
+  option value
 
 A C<#> starts a comment.
 
 
-=head1 CONFIGURATION FILE DIRECTIVES
+=head2 Configuration file content
 
-Each following directive can be passed as well on the command line as an option.
+Each following directive can be passed as well as an option on the command line.
 
 =over 4
 
@@ -901,16 +901,16 @@ This option is to bypass this default.
 
 =item mail_from C<email>
 
-set the email address of the sender for the mail alerts
+set the email address of the sender for mail alerts
 
 =item mail_to C<email>
 
-set the email address of the recipient for the mail alerts
+set the email address of the recipient for mail alerts
 
 =item max_runtime C<time_in_second>
 
 set the max among of time that a backup can take. Older than this
-value, a C<.tag.running> temporary directory will be deleted.
+value, a C<.tag.running> temporary directory can be deleted.
 
 =item rsync_path C<path/to/rsync>
 
@@ -930,7 +930,8 @@ C<--rsync_retcode_warn> is considered as an error return code.
 
 =item ro_default C<"--opt1 --opt2">
 
-pass some options to C<rsync> (useful only in config file)
+pass some options to C<rsync> (useful only in config file). 
+Default is C<"--hard-links --archive -e ssh">.
 
 =item send_warn C<0|1>
 
