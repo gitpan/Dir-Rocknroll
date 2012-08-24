@@ -20,7 +20,7 @@ use Carp;
 use strict;
 
 #our $VERSION = "0.".eval{'$Rev: 27 $'=~/(\d+)/;$1;} ;
-our $VERSION = "0.29" ;
+our $VERSION = "0.30" ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -253,7 +253,7 @@ END { $log->send() if $log ; closelog() ; }
             ) ;
     return unless defined $confname ;
 
-    my $conffile=new_Config::General(-ConfigFile=>$confname,-ExtendedAccess => 1) or $log->warn("can't read config file $confname") ;
+    my $conffile=new Config::General(-ConfigFile=>$confname,-ExtendedAccess => 1) or $log->warn("can't read config file $confname") ;
     my %conf ;
     {
       my %this_conf = $conffile->getall() ;
@@ -615,8 +615,8 @@ Rsync fOr baCKup (and roll) - v$VERSION
 
 $msg
 
-Usage: $this_prog --init n interval_name dstdir (1)
-       $this_prog options interval_name srcdir dstdir (2)
+Usage: $this_prog --init n tag dstdir (1)
+       $this_prog options tag srcdir dstdir (2)
        $this_prog --man
 
   common options :
@@ -631,10 +631,11 @@ Usage: $this_prog --init n interval_name dstdir (1)
 
   example :
     $this_prog --init 7 daily /var/snapshots/home
-    creates an archive directory structure
+      initialize a set of 7 archives, named 'daily'
 
     $this_prog daily /home /var/snapshots/home
-    rsync a new copy and roll the archives
+      rsync a new archive of /home to the set 'daily' located into 
+      /var/snapshots/home, and roll the existing archives in the set
 
 EOF
 exit(0) ;
