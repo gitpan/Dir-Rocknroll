@@ -20,7 +20,7 @@ use Carp;
 use strict;
 
 #our $VERSION = "0.".eval{'$Rev: 487 $'=~/(\d+)/;$1;} ;
-our $VERSION = 0.32 ;
+our $VERSION = 0.33 ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -35,9 +35,6 @@ use Sys::Hostname;
 use Config::General ;
 use Config::General::Extended ;
 use Dir::Which q/which/;
-
-# binaries
-my $RSYNC = "/usr/bin/rsync" ;
 
 my $this_prog = 'rocknroll' ;
 my $NEW_EXT = "_running_snapshot_" ;
@@ -252,7 +249,7 @@ END { $log->send() if $log ; closelog() ; }
             ,-defaultpath=>$path
             ) ;
     return unless defined $confname ;
-
+    
     my $conffile=new Config::General(-ConfigFile=>$confname,-ExtendedAccess => 1) or $log->warn("can't read config file $confname") ;
     my %conf ;
     {
@@ -265,6 +262,7 @@ END { $log->send() if $log ; closelog() ; }
     }
     # die Dumper \%conf ;
     $this->{"conf"} = \%conf ;
+    $this->{"confname"} = $confname ;
   }
   sub get
   {
@@ -738,22 +736,24 @@ $config->init($default_conf,\%arg_conf) ;
 $config->load() ;
 
 $log = new _Log($cmdline,$config->get("debug")?2:$config->get("verbose")?1:0) ;
+$log->debug("loading config file ".$config->{"confname"}) ;
 $log->debug("config: ".Dumper $config) ;
 
-my $interval = shift() or _usage("wrong number of arguments") ;
+my $interval = shift(@ARGV) or _usage("wrong number of arguments") ;
 
 my ($srcdir,$dstdir) ;
 
 if ($init)
 {
   $init =~ /^\d+$/ or _usage("'$init' isn't numeric") ;
-  $dstdir = shift() or _usage("dstdir is missing") ;
+  $dstdir = shift(@ARGV) or _usage("dstdir is missing") ;
 }
 else
 {
-  $srcdir = shift() or _usage("srcdir is missing") ;
-  $dstdir = shift() or _usage("dstdir is missing") ;
+  $srcdir = shift(@ARGV) or _usage("srcdir is missing") ;
+  $dstdir = shift(@ARGV) or _usage("dstdir is missing") ;
 }
+
 _usage("wrong number of arguments") if scalar(@ARGV)!=0 ;
 
 my $rocknRoll = new _RocknRoll($dstdir,$interval) ;
@@ -788,11 +788,11 @@ __END__
 
 C<rocknroll> - Rsync fOr baCKup and Roll
 
-Light incremental backup tool based on C<rsync>.
+Light backup tool based on C<rsync>.
 
 =head1 SYNOPSIS
 
-  # rocknroll --init n tag dstdir           # initialization
+  # rocknroll --init n tag dstdir           # initialization 
 
   # rocknroll [options] tag srcdir dstdir   # backup
 
@@ -802,21 +802,38 @@ Light incremental backup tool based on C<rsync>.
 
 =head1 DESCRIPTION
 
-C<rocknroll> backups a remote directories tree C<srcdir> in C<dstdir> onto the
-local host.  For this backup, it manages a set of archives, named
-C<tag.1>, C<tag.2>, etc.  Using the C<link-dest> option of C<rsync>, it
-keeps only the difference between the different archives.
+C<rocknroll> backups a remote directories tree C<srcdir> in local directory C<dstdir>.  
+Using the C<link-dest> option of C<rsync>, it manages a set of differential archives, named
+C<tag.1>, C<tag.2>, etc.
 
-A C<dstdir> can contain several tagged sequences of archive. For example,
-a C<dstdir> can contain 2 archive sets named C<daily.1 daily.2 daily.3
-daily.4 daily.5 daily.6 daily.7> and C<week.1 week.2 week.3 week.4>.
+C<dstdir> can contain several set of differential archives. For example,
+C<dstdir> can contain 2 sets named C<daily.1 daily.2 daily.3
+daily.4 daily.5 daily.6 daily.7> and C<weekly.1 weekly.2 weekly.3 weekly.4>.
 
 Before a C<dstdir> can be able to store an archive set, it must be
 formatted with the C<--init> option.
 
+=head1 ARGUMENTS
+
+=over 4
+
+=item tag
+
+the name of the archive set.
+
+=item srcdir
+
+the topdir to backup, with the format of the srcdir of rsync : C<[[user@]hostname:]dir>
+
+=item dstdir
+
+the local destination directory for the backup.
+
+=back
+
 =head1 OPTIONS
 
-Almost options can as well be specified into the configuration file.
+Almost command line options can be specified as well into the configuration file.
 
 =over 4
 
@@ -825,8 +842,8 @@ Almost options can as well be specified into the configuration file.
 use an alternate config file.
 
 By default, the config file C<rocknroll.conf> is
-searched in C<@/>, C<@/../etc/>, C</etc/>, C</etc/rocknroll.d/>
-where C<@> is the directory containing the rocknroll binary.
+searched in C<@/>, C<@/../etc/>, C</etc/>, C</etc/rocknroll.d/> (in this order)
+where C<@> is the directory containing the rocknroll script.
 
 =item --continue
 
@@ -855,16 +872,16 @@ don't specify any C<--link-dest> option to C<rsync(1)>
 
 =item --no-roll
 
-don't roll up the archives set
+don't roll the archives set
 
 =item --refresh
 
 only update the archive C<tag.1> (without deletion of any files on
-it).  Don't roll up the archives set.
+it).  Don't roll the archives set.
 
 =item --ro C<"--opt1 --opt2 --opt3">
 
-pass some options to C<rsync(1)> (useful only as command line option)
+rsync option : pass some options to C<rsync(1)> (useful only as command line option)
 
 =item --update
 
@@ -877,7 +894,7 @@ up archives set.
 
 Options are also taken from directives specified into C<rocknroll.conf>, 
 a file located in C<@/>, C<@/../etc/>, C</etc/>, C</etc/rocknroll.d/>
-where C<@> is the directory contained the rocknroll binary.
+where C<@> is the directory contained the rocknroll script.
 
 The format of a line is :
 
@@ -992,6 +1009,21 @@ the temporary directory (located in the archive directory) for the
 running rsync.
 
 =back
+
+=head1 EXAMPLES
+
+  # rocknroll --init 7 daily /var/backup/myserver
+  # rocknroll --init 4 weekly /var/backup/myserver
+  # rocknroll --init 12 monthly /var/backup/myserver
+  
+prepare the directory C</var/daily-backup> to receive 3 sets of respectively 7 archives named C<daily>, 
+4 archives named C<weekly> and 12 archives named yearly.
+
+  # rocknroll daily myhost.mydomain:/ /var/backup/myserver
+  
+perform a new backup of C<myhost.mydomain:/>, add it as daily.1 to the archive set into the local directory C</var/backup/myserver>,
+and roll the set (forget the existing daily.7)
+
 
 =head1 SEE ALSO
 

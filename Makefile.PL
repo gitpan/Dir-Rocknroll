@@ -24,7 +24,8 @@ WriteMakefile
                  },
   'INSTALLDIRS' => 'site',
   'EXE_FILES' => [
-                   'bin/rocknroll'
+                   'bin/rocknroll',
+                   'bin/rocknroll.conf'
                  ],
   'PL_FILES' => {}
 )
