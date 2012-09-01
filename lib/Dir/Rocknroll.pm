@@ -6,7 +6,7 @@ package Dir::Rocknroll ;
 #
 # Jacquelin Charbonnel - CNRS/Mathrice/LAREMA - 2006-09-04
 #
-# $Id: Rocknroll.pm 487 2012-08-24 18:33:34Z jaclin $
+# $Id: Rocknroll.pm 488 2012-09-01 19:14:00Z jaclin $
 #
 ####################################################
 
@@ -19,8 +19,8 @@ use 5.006;
 use Carp;
 use strict;
 
-#our $VERSION = "0.".eval{'$Rev: 487 $'=~/(\d+)/;$1;} ;
-our $VERSION = 0.33 ;
+#our $VERSION = "0.".eval{'$Rev: 488 $'=~/(\d+)/;$1;} ;
+our $VERSION = 0.34 ;
 
 use Data::Dumper ;
 use Sys::Syslog ;
@@ -915,7 +915,7 @@ Each following directive can be passed as well as an option on the command line.
 
 =item link-dest C<dir>
 
-by default the C<--link-dest> option of C<rsync(1)> is set to the C<tag.1> directory name.
+by default the C<--link-dest> option of C<rsync(1)> is set to the C<tag.1> directory.
 This option is to bypass this default.
 
 =item mail_from C<email>
@@ -1016,13 +1016,13 @@ running rsync.
   # rocknroll --init 4 weekly /var/backup/myserver
   # rocknroll --init 12 monthly /var/backup/myserver
   
-prepare the directory C</var/daily-backup> to receive 3 sets of respectively 7 archives named C<daily>, 
-4 archives named C<weekly> and 12 archives named yearly.
+prepare the directory C</var/backup/myserver> to receive 3 sets of respectively 7 archives named C<daily>, 
+4 archives named C<weekly> and 12 archives named monthly.
 
   # rocknroll daily myhost.mydomain:/ /var/backup/myserver
   
-perform a new backup of C<myhost.mydomain:/>, add it as daily.1 to the archive set into the local directory C</var/backup/myserver>,
-and roll the set (forget the existing daily.7)
+perform a new backup of C<myhost.mydomain:/>, add it as C<daily.1> to the archive set into the local directory C</var/backup/myserver>,
+and roll the set C<daily>(forget the existing C<daily.7>)
 
 
 =head1 SEE ALSO
